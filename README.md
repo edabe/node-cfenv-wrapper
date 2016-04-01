@@ -2,7 +2,7 @@ node-cfenv-wrapper
 ==================
 Overview
 --------
-I'm a fan of the [`cfenv`](https://github.com/cloudfoundry-community/node-cfenv) package for [Node.js](http://nodejs.org/) written by [Patrick Mueller](https://twitter.com/pmuellr). It parses environment info in a [Bluemix](https://www.bluemix.net) (or [Cloud Foundry](http://cloudfoundry.org/)) application, and provides functions to make it easy to retrieve all of the service attributes you need from [`VCAP_SERVICES`](https://www.ng.bluemix.net/docs/#cli/index.html#retrieving). It also gives access to other important attributes for port, host name/ip address, URL of the application, etc. On top of that, it detects whether your app is running locally or in the cloud. And, when running locally, it provides handy defaults. 
+I'm a fan of the [`cfenv`](https://github.com/cloudfoundry-community/node-cfenv) package for [Node.js](http://nodejs.org/) written by [Patrick Mueller](https://twitter.com/pmuellr). It parses environment info in a [Bluemix](https://www.bluemix.net) (or [Cloud Foundry](http://cloudfoundry.org/)) application, and provides functions to make it easy to retrieve all of the service attributes you need from [`VCAP_SERVICES`](https://www.ng.bluemix.net/docs/#cli/index.html#retrieving). It also gives access to other important attributes for port, host name/ip address, URL of the application, etc. On top of that, it detects whether your app is running locally or in the cloud. And, when running locally, it provides handy defaults.
 
 I've written a simple wrapper (a local module called `cfenv-wrapper`) to make local development of Bluemix/Cloud Foundry apps a little easier. My code parses a local copy of your app's environment data, and extracts the data for `VCAP_SERVICES` and `VCAP_APPLICATION`. Then, it passes that information to `cfenv`'s initialization function, <code>getAppEnv</code>. After this initialization, you can use the same `cfenv` interface just as if you were running in the cloud.
 
@@ -40,7 +40,7 @@ You need to get the code onto your machine in order to run your own copy on Blue
 OR
 
 * Use `git clone` from the command line:
-	1. `cd` to the parent directory you want to install the project in 
+	1. `cd` to the parent directory you want to install the project in
 	2. Run `git clone https://github.com/aerwin/node-cfenv-wrapper.git`
 	3. Run `cd node-cfenv-wrapper/`
 
@@ -77,12 +77,12 @@ You should then see a bunch of console output that eventually ends with somethin
 	urls: cfenv-wrapper-${random-word}.mybluemix.net
 
      state     since                    cpu    memory          disk   
-	#0   running   2014-10-04 03:19:59 PM   0.0%   15.7M of 128M   25.1M of 1G 
+	#0   running   2014-10-04 03:19:59 PM   0.0%   15.7M of 128M   25.1M of 1G
 
 After the successful push, you should be able to run your app by pointing your browser at:
 
 	http://cfenv-wrapper-${random-word}.mybluemix.net/
-	
+
 If everything works, the page in the browser should show something like the following (notice `Is Local` is `false`):
 
 	BASE_INFO
@@ -92,7 +92,7 @@ If everything works, the page in the browser should show something like the foll
 	Port: 61400
 	Bind: 0.0.0.0
 	URL: https://cfenv-wrapper.mybluemix.net
-	
+
 	SERVICES
 	--------
 	No services are bound to this app.
@@ -115,7 +115,7 @@ If everything works, the page in the browser should show something like the foll
 If you start binding services or adding environment variables to your app, then you'll see additional data in the SERVICES and ENVIRONMENT VARIABLES sections when you refresh the page.
 
 	Information retrieved using cfenv:
-	
+
 	BASE_INFO
 	---------
 	Is Local: false
@@ -123,7 +123,7 @@ If you start binding services or adding environment variables to your app, then 
 	Port: 61400
 	Bind: 0.0.0.0
 	URL: https://cfenv-wrapper.mybluemix.net
-	
+
 	SERVICES
 	--------
 	CloudantNoSQLDB
@@ -143,6 +143,30 @@ To see a JSON representation of your app's environment data, you can run the fol
 	cf env APP_NAME
 
 Then, copy the JSON (which starts right after the **System-Provided** header and ends just before the **User-Provided** header) into a file named `env.json`. This file should be in the same place on your local file system that you put the code. That is, as a peer to the `server.js` file.
+
+Note that you need to do a small edit to validate the copied content as JSON:
+
+	{
+		"VCAP_SERVICES": {
+			...
+		}
+	}
+	{
+		"VCAP_APPLICATION": {
+			...
+		}
+	}
+
+Should become:
+
+{
+	"VCAP_SERVICES": {
+		...
+	},
+	"VCAP_APPLICATION": {
+		...
+	}
+}
 
 If you have user-defined environment variables, put them into a file name `env_custom.json`. For example, if `cf env` shows the following user-provided environment variables:
 
@@ -184,7 +208,7 @@ Once dependencies are installed, you can run the following command from the code
 Then, point your browser at the URL that is shown in the console output (e.g., something like `http://localhost:6001`). You should see similar kinds of information that you saw when running in the cloud. However, the top part will be different (e.g., `Is Local` will be `true` and port/url will be changed). But, the SERVICES and ENVIRONMENT VARIABLES sections should reflect whatever was in your `env.json` \ `env_custom.json` or `env.log` files:
 
 	Information retrieved using cfenv:
-	
+
 	BASE_INFO
 	---------
 	Is Local: true
