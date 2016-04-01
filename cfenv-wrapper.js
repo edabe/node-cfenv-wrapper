@@ -55,7 +55,8 @@ module.exports = (function() {
 					// provide values for the VCAP_SERVICES value in
 					// env.json
 					vcap: {
-						services: envJson.VCAP_SERVICES
+						services: envJson.VCAP_SERVICES,
+						application: envJson.VCAP_APPLICATION
 					}
 				};
 				appEnv = cfenv.getAppEnv(envOptions);
